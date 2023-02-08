@@ -1,6 +1,6 @@
 %{
   
-   #include "tokens.h"
+   //#include "tokens.h"
     int line = 1;
     int column = 0;
 %}
@@ -35,6 +35,8 @@ DIGIT [0-9]
 "]" {return ']';}
 ".." {return TK_OP_RANGE;} 
 ";" {return ';';}
+"(" {return TK_LEFTPARENS;}
+")" {return TK_RIGHTPARENS;}
 
 "break" {return KW_BREAK;}
 "do" {return KW_DO;}
@@ -47,6 +49,13 @@ DIGIT [0-9]
 "return" {return KW_RETURN;}
 "true" {return KW_TRUE;}
 "var" {return KW_VAR;}
+"int" {return KW_INT;}
+"float" {return KW_FLOAT;}
+"boolean" {return KW_BOOLEAN;}
+"string" {return KW_STRING;}
+"array" {return KW_ARRAY;}
+"fun" {return KW_FUN;}
+"while" {return KW_WHILE;}
 {LETTER}({DIGIT}|{LETTER}|_)* {return TK_ID;}
 
 . {printf("caracter invalido %c en la linea: %d\n", yytext[0], yylineno);}
