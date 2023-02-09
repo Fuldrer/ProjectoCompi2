@@ -3,6 +3,44 @@
    //#include "tokens.h"
     int line = 1;
     int column = 0;
+    enum Tokens
+    {
+        TK_PLUS,
+        TK_ID,
+        TK_NUMBER,
+        TK_OR,
+        TK_INCREMENT,
+        TK_DECREMENT,
+        TK_LOGICAL_AND,
+        TK_NOT,
+        TK_LOGICAL_OR,
+        TK_EQ,
+        TK_DISTINCT,
+        TK_GREAT_THAN,
+        TK_LESS_THAN,
+        TK_GREAT_EQ_THAN,
+        TK_LESS_EQ_THAN,
+        TK_OP_RANGE,
+        TK_LEFTPARENS,
+        TK_RIGHTPARENS,
+        KW_BREAK,
+        KW_DO,
+        KW_ELSE,
+        KW_FALSE,
+        KW_FOR,
+        KW_IF,
+        KW_IN,
+        KW_RETURN,
+        KW_TRUE,
+        KW_VAR,
+        KW_INT,
+        KW_FLOAT,
+        KW_BOOLEAN,
+        KW_STRING,
+        KW_ARRAY,
+        KW_FUN,
+        KW_WHILE
+    };
 %}
 
 %option noyywrap
@@ -54,9 +92,9 @@ DIGIT [0-9]
 "boolean" {return KW_BOOLEAN;}
 "string" {return KW_STRING;}
 "array" {return KW_ARRAY;}
-"fun" {return KW_FUN;}
 "while" {return KW_WHILE;}
 {LETTER}({DIGIT}|{LETTER}|_)* {return TK_ID;}
+[\n \r \t] {/*ignorar*/}
 
 . {printf("caracter invalido %c en la linea: %d\n", yytext[0], yylineno);}
 %%

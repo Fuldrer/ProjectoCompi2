@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 extern FILE * yyin;
-int yyparse();
+int yylex();
 extern char * yytext;
 extern int yylineno;
 
@@ -20,6 +20,10 @@ int main(int argc, char*argv[]){
 
     yyin = f;
 
-   yyparse();
+    int currentToken = yylex();
+    while(currentToken != 0){
+        printf("Lexema: %s, Token: %d, Linea: %d\n", yytext, currentToken, yylineno);
+        currentToken = yylex();
+    }
     return 0;
 }
