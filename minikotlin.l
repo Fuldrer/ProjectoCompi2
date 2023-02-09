@@ -39,7 +39,12 @@
         KW_STRING,
         KW_ARRAY,
         KW_FUN,
-        KW_WHILE
+        KW_WHILE,
+        TK_LEFTKEY,
+        TK_RIGHTKEY,
+        TK_COMA,
+        TK_SEMICOLON
+
     };
 %}
 
@@ -58,6 +63,8 @@ DIGIT [0-9]
 "/" {return '/';}
 "%" {return '%';}
 "=" {return '=';}
+"," {return TK_COMA;}
+":" {return TK_SEMICOLON;}
 "++" {return TK_INCREMENT;}
 "--" {return TK_DECREMENT;}
 "&&" {return TK_LOGICAL_AND;}
@@ -75,6 +82,8 @@ DIGIT [0-9]
 ";" {return ';';}
 "(" {return TK_LEFTPARENS;}
 ")" {return TK_RIGHTPARENS;}
+"{" {return TK_LEFTKEY;}
+"}" {return TK_RIGHTKEY;}
 
 "break" {return KW_BREAK;}
 "do" {return KW_DO;}
@@ -94,6 +103,7 @@ DIGIT [0-9]
 "array" {return KW_ARRAY;}
 "while" {return KW_WHILE;}
 {LETTER}({DIGIT}|{LETTER}|_)* {return TK_ID;}
+{DIGIT}* {return TK_NUMBER;}
 [\n \r \t] {/*ignorar*/}
 
 . {printf("caracter invalido %c en la linea: %d\n", yytext[0], yylineno);}
