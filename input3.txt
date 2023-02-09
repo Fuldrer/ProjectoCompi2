@@ -1,0 +1,12 @@
+fun main (args: Array<String>){
+
+    val a = 10
+    val b = 9
+    val c = -1
+    var result: Boolean
+
+    //result is trure is a is largest
+    result = (a>b) && (a>c)// result = (a>b) and (a>c)
+    println(result)
+
+}

@@ -103,7 +103,7 @@ DIGIT [0-9]
 "array" {return KW_ARRAY;}
 "while" {return KW_WHILE;}
 {LETTER}({DIGIT}|{LETTER}|_)* {return TK_ID;}
-{DIGIT}* {return TK_NUMBER;}
+{DIGIT}+("."{DIGIT}+)* {return TK_NUMBER;}
 [\n \r \t] {/*ignorar*/}
 
 . {printf("caracter invalido %c en la linea: %d\n", yytext[0], yylineno);}
