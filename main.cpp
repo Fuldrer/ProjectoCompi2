@@ -1,11 +1,11 @@
 #include <stdio.h>
 
 extern FILE * yyin;
-int yylex();
+int yyparse();
 extern char * yytext;
 extern int yylineno;
 
-int main(int argc, char*argv[]){
+int main(int argc, char* argv[]){
 
     if(argc != 2){
         fprintf(stderr, "Falta el archivo de entrada para %s\n", argv[0]);
@@ -20,10 +20,6 @@ int main(int argc, char*argv[]){
 
     yyin = f;
 
-    int currentToken = yylex();
-    while(currentToken != 0){
-        printf("Lexema: %s, Token: %d, Linea: %d\n", yytext, currentToken, yylineno);
-        currentToken = yylex();
-    }
+    yyparse();
     return 0;
 }
