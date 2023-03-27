@@ -379,6 +379,22 @@ void IfStatement::evaluateSemantic(){
 }
 
 void WhileStatement::evaluateSemantic(){
+    
+    if (this->expression ->getType()->primitiveType != BOOLEAN)
+    {
+        cerr<<"El while requiere una expresion booleana linea: "<< this->line <<" columna "<<this->column<<endl;
+        return;
+    }
+    pushContext();
+
+    list<Statement *>::iterator it = this->statements->begin();
+    while (it != this->statements->end())
+    {
+        (*it)->evaluateSemantic();
+        it++;
+    }
+    //this->statements->evaluateSemantic();
+    popContext();
 }
 
 void ForStatement::evaluateSemantic(){
@@ -398,6 +414,23 @@ void ForStatement::evaluateSemantic(){
 }
 
 void FunctionDeclarationStatement::evaluateSemantic(){
+    /*if(this->statements->ids->size() > 4){
+        cerr<<"Solo se soportan 4 parametros por método, método "<<this->id<<" linea "<<this->line<<" columna "<<this->column<<endl;
+        return;
+    
+    if (methods[this->id] != NULL)
+    {
+        cerr<<"Ya existe un método con el nombre"<<this->id<<" linea "<<this->line<<" columna "<<this->column<<endl;
+        return;
+    }
+
+    methods[this->id] = new MethodInformation(this->type, this->args);
+    pushContext();
+    this->args->evaluateSemantic();
+    this->statement->evaluateSemantic();
+    popContext();
+    }*/
+    
 }
 
 void VarDeclarationStatement::evaluateSemantic(){
@@ -410,6 +443,20 @@ void VarDeclarationStatement::evaluateSemantic(){
 }
 
 void AssignationStatement::evaluateSemantic(){
+    if (this->isArray && this->index->getType()->primitiveType != INTEGER)
+    {
+        cerr<<"El indice en el arreglo debe ser un entero linea: "<<this->line<<" columna: "<<this->column<<endl;
+        return;
+    }
+
+    PrimitiveType * varType = getVarType(this->id);
+    PrimitiveType * exprType = this->stmt->getType();
+
+    if (varType != exprType)
+    {
+        cerr<<"No se puede assignar "<< getTypeAsString(exprType)<< " a la variable de tipo "<<getTypeAsString(varType)<<" linea " <<this->line<<" columna: "<<this->column<<endl;
+        return;
+    }
 }
 
 void PrintStmt::evaluateSemantic(){

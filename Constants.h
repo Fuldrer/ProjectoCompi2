@@ -1,5 +1,7 @@
 enum UnaryOperator{
-    NOT
+    NOT,
+    INCREMENT,
+    DECREMENT
 };
 
 enum PrimitiveType{
