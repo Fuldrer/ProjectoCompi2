@@ -264,38 +264,6 @@ PrimitiveType getVarType(string id){
 }
 
 PrimitiveType MethodInvocationExpr::getType(){
-    /*MethodInformation * method = methods[this->id->id];
-    if (method == NULL)
-    {
-        cerr<<this->id->id<<" no declarado linea: "<<this->line<<" column "<<this->column<<endl;
-        return NONE;
-    }
-    
-    if (method->parameters->ids->size() > this->args->size())
-    {
-        cerr<<"Muy pocos argumentos para el método: "<<this->id->id <<" linea: "<<this->line<<" column "<<this->column<<endl;
-        return NONE;
-    }
-    
-    if (method->parameters->ids->size() < this->args->size())
-    {
-        cerr<<"Muchos argumentos para el método: "<<this->id->id <<" linea: "<<this->line<<" column "<<this->column<<endl;
-        return NONE;
-    }
-
-    ComplexType * paramsType = method->parameters->type;
-    list<Expression*>::iterator argsIt = this->args->begin();
-    while (argsIt != this->args->end())
-    {
-        if ((*argsIt)->getType() != paramsType->primitiveType)
-        {   
-            cerr<<"Tipo de dato incorrecto en parámetros, se esperaba tipo: "<<getTypeAsString(paramsType->primitiveType)<<" se obtuvo: "<< getTypeAsString((*argsIt)->getType()) <<" linea: "<<this->line<<" column "<<this->column<<endl;
-            return NONE;
-        }
-        argsIt++;
-    }
-    
-    return method->returnType;*/
     return NONE;
 }
 
