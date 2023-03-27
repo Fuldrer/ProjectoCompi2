@@ -3,6 +3,7 @@
 #include <map>
 
 using namespace std;
+
 //map<string, MethodInformation *> methods = {};
 
 void IDExpr::print(){
@@ -50,11 +51,27 @@ void MethodInvocationExpr::print(){
 }
 
 void ExpressionStatement::print(){
-
+    cout<<"Expression statement "<<this->line << " column : "<<this->column<<endl;
 }
 
 void IfStatement::print(){
-    
+    cout<<"If statement "<<this->line << " column : "<<this->column<<endl;
+    list<Statement *>::iterator it = this->trueStatement->begin();
+    while (it != this->trueStatement->end())
+    {
+        (*it)->print();
+        it++;
+    }
+
+    if (this->falseStatement != NULL)
+    {
+        it = this->falseStatement->begin();
+        while (it != this->falseStatement->end())
+        {
+            (*it)->print();
+            it++;
+        }
+    }
 }
 
 void WhileStatement::print(){
@@ -305,6 +322,28 @@ void ExpressionStatement::evaluateSemantic(){
 }
 
 void IfStatement::evaluateSemantic(){
+        if (this->expression->getType() != BOOLEAN)
+    {
+        cerr<<"El if requiere una expresion booleana linea: "<< this->line <<" columna "<<this->column<<endl;
+        return;
+    }
+    pushContext();
+    list<Statement *>::iterator it = this->trueStatement->begin();
+    while (it != this->trueStatement->end())
+    {
+        (*it)->evaluateSemantic();
+        it++;
+    }
+    popContext();
+    if (this->falseStatement != NULL)
+    {
+        it = this->falseStatement->begin();
+        while (it != this->falseStatement->end())
+        {
+            (*it)->evaluateSemantic();
+            it++;
+        }
+    }
 }
 
 void WhileStatement::evaluateSemantic(){
