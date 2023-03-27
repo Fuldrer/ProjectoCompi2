@@ -203,6 +203,17 @@ class ExpressionStatement : public Statement{
         void evaluateSemantic();
 };
 
+class ReturnStmt : public Statement{
+    public:
+        ReturnStmt(Expression * expr, int line, int column) : Statement(line, column)
+        {
+            this->expr = expr;
+        }
+        Expression * expr;
+        void print();
+        void evaluateSemantic();
+};
+
 class IfStatement : public Statement{
     public:
         IfStatement(Expression * expression, list<Statement * > *trueStatement ,list<Statement * >* falseStatement , int line, int column) :
@@ -250,14 +261,14 @@ class ForStatement : public Statement
 
 class MethodInvocationExpr : public Expression{
     public:
-        MethodInvocationExpr(IDExpr * id, list<Expression *> * args, int line, int column)
+        MethodInvocationExpr(IDExpr * id, list<Statement *> * args, int line, int column)
             : Expression(line, column)
         {
             this-> id = id;
             this->args = args;
         }
         IDExpr * id;
-        list<Expression *> * args;
+        list<Statement *> * args;
         void print();
         PrimitiveType getType();
 };
@@ -271,7 +282,7 @@ class Declaration : public Statement{
 
 class FunctionDeclarationStatement : public Declaration{
     public:
-        FunctionDeclarationStatement(string id,list<Expression *> * args, PrimitiveType type, list<Statement * > * statements ,int line, int column)
+        FunctionDeclarationStatement(string id,list<Statement *> * args, PrimitiveType type, list<Statement * > * statements ,int line, int column)
             : Declaration(line, column){
             this->id = id;
             this->args = args;
@@ -280,7 +291,7 @@ class FunctionDeclarationStatement : public Declaration{
 
         }
         string id;
-        list<Expression *> * args;
+        list<Statement *> * args;
         PrimitiveType type;
         list<Statement * > *statements;
         void print();

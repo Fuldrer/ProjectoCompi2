@@ -66,7 +66,8 @@ DIGIT [0-9]
 {LETTER}({DIGIT}|{LETTER}|_)* {yylval.string_T = strdup(yytext); return TK_ID;}
 {DIGIT}+ {yylval.int_t = atoi(yytext); return TK_NUMBER;}
 
-[\n \r \t] {/*ignorar*/}
+[ \t] { column++; }
+[ \n \r] { line++; }
 
 . {printf("caracter invalido %c en la linea: %d\n", yytext[0], yylineno);}
 %%

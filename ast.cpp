@@ -54,6 +54,10 @@ void ExpressionStatement::print(){
     cout<<"Expression statement "<<this->line << " column : "<<this->column<<endl;
 }
 
+void ReturnStmt::print(){
+    cout<<"Return statement "<<this->line << "column :" <<this->column<<endl;
+}
+
 void IfStatement::print(){
     cout<<"If statement "<<this->line << " column : "<<this->column<<endl;
     list<Statement *>::iterator it = this->trueStatement->begin();
@@ -321,6 +325,10 @@ void ExpressionStatement::evaluateSemantic(){
     this->expr->getType();
 }
 
+void ReturnStmt::evaluateSemantic(){
+    this->expr->getType();
+}
+
 void IfStatement::evaluateSemantic(){
         if (this->expression->getType() != BOOLEAN)
     {
@@ -353,6 +361,8 @@ void ForStatement::evaluateSemantic(){
 }
 
 void FunctionDeclarationStatement::evaluateSemantic(){
+    /*Revisar si el ultimo statement del statement list
+    de la funcion es del mismo tipo que el type de la funcion*/
 }
 
 void VarDeclarationStatement::evaluateSemantic(){

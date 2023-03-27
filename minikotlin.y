@@ -37,13 +37,13 @@
 
 %token<float_t> TK_FLOAT
 %token<int_t> TK_NUMBER
-%type<expr_T> term unary_expr arithmetic_expr expression factor
+%type<expr_T> term unary_expr arithmetic_expr expression factor postfix
 %token<bool_t> KW_TRUE KW_FALSE
 %token<string_T> TK_ID TK_LIT_STRING TK_COMMENT_LINE
 %type<int_t> type
-%type<statement_list_t> statement_list
-%type<statement_t> statement program assigantion_stmt
-%type<expr_list_t> param_list
+%type<statement_list_t> statement_list param_list
+%type<statement_t> statement program assigantion_stmt 
+//%type<expr_list_t> param_list
 
 
 %%
@@ -64,8 +64,9 @@ statement: KW_PRINTLN '(' expression ')' {$$ = new PrintStmt($3, line, column);}
         | KW_FOR  expression  TK_LEFTKEY statement_list TK_RIGHTKEY  {$$ = new ForStatement($2, $4, line, column);}
         | KW_WHILE  expression  TK_LEFTKEY statement_list  TK_RIGHTKEY {$$ = new WhileStatement($2, $4, false , line,column);}
         | KW_DO TK_LEFTKEY statement_list TK_RIGHTKEY KW_WHILE expression {$$ = new WhileStatement($6, $3, true, line,column);}
-        | KW_IF expression TK_LEFTKEY statement_list TK_RIGHTKEY  {$$ = new IfStatement($2,$4,NULL,line,column);}
-        | KW_IF expression TK_LEFTKEY statement_list TK_RIGHTKEY KW_ELSE TK_LEFTKEY statement_list TK_RIGHTKEY {$$ = new IfStatement($2,$4,$8,line,column);}
+        | KW_IF expression TK_LEFTKEY statement_list TK_RIGHTKEY  {$$ = new IfStatement($2,$4,NULL,line,column); $$->evaluateSemantic();} 
+        | KW_IF expression TK_LEFTKEY statement_list TK_RIGHTKEY KW_ELSE TK_LEFTKEY statement_list TK_RIGHTKEY {$$ = new IfStatement($2,$4,$8,line,column); $$->evaluateSemantic();}
+        | KW_RETURN expression {$$ = new ReturnStmt($2, line, column);}
         | expression {$$ = new ExpressionStatement($1,line, column);}
         ;
 
@@ -73,9 +74,9 @@ assigantion_stmt: TK_ID '=' expression { $$ = new AssignationStatement($1, $3, N
                 | TK_ID '[' expression ']' '=' expression { $$ = new AssignationStatement($1, $6, $3, line, column); }
                 ;
 
-param_list: param_list ',' expression { $$ = $1; $$->push_back($3);}
-            | expression { $$ = new list<Expression *>; $$->push_back($1);}
-            | {$$ = new list<Expression *>; }
+param_list: param_list ',' statement { $$ = $1; $$->push_back($3);}
+            | statement { $$ = new list<Statement *>; $$->push_back($1);}
+            | {$$ = new list<Statement *>; }
             ;
 
 expression: expression '<' arithmetic_expr { $$ = new LtExpr($1, $3, line, column);}
@@ -99,8 +100,13 @@ factor: factor '*' unary_expr { $$ = new MultExpr($1, $3, line, column);}
         ;
 
 unary_expr: TK_NOT term { $$ = new UnaryExpr(NOT, $2, line, column); }
-           | term {$$ = $1;}
+           | postfix {$$ = $1;}
            ;
+
+postfix: term TK_INCREMENT { $$ = new UnaryExpr(INCREMENT, $1, line, column); }
+        | term TK_DECREMENT { $$ = new UnaryExpr(DECREMENT, $1, line, column); }
+        | term {$$ = $1;}
+        ;
 
 type: KW_INT { $$ = INTEGER;}
      | KW_FLOAT { $$ = FLOAT; }
