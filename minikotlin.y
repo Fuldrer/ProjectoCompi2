@@ -48,7 +48,7 @@
 
 %%
 
-program: statement_list {$$ = new MainStmt($1, line, column); $$->evaluateSemantic();}
+program: statement_list {$$ = new MainStmt($1, line, column); $$->evaluateSemantic();} 
        ;
 
 statement_list: statement_list statement { $$ = $1; $$->push_back($2); }
@@ -56,8 +56,8 @@ statement_list: statement_list statement { $$ = $1; $$->push_back($2); }
                 ;
 
 statement: KW_PRINTLN '(' expression ')' {$$ = new PrintStmt($3, line, column);}
-        | KW_VAR TK_ID ':' KW_ARRAY type '[' expression']' {$$ = new VarDeclarationStatement($2, true, (PrimitiveType)$5, $7, line, column);}
-        | KW_VAR TK_ID ':' type {$$ = new VarDeclarationStatement($2, false, (PrimitiveType)$4, NULL, line, column);}
+        | KW_VAR TK_ID ':' KW_ARRAY type '[' expression ']' {$$ = new VarDeclarationStatement($2, (PrimitiveType)$5, $7, line, column);}
+        | KW_VAR TK_ID ':' type {$$ = new VarDeclarationStatement($2, (PrimitiveType)$4, NULL, line, column);}
         | assigantion_stmt {$$ = $1;}
         | KW_FUN TK_ID '(' param_list ')' ':' type TK_LEFTKEY statement_list TK_RIGHTKEY { $$ = new FunctionDeclarationStatement($2, $4, (PrimitiveType)$7, $9, line, column);}
         | TK_ID '(' param_list ')' { $$ = new ExpressionStatement(new MethodInvocationExpr(new IDExpr($1, line, column), $3, line, column), line , column); }

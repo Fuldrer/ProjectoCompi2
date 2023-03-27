@@ -280,6 +280,23 @@ class Declaration : public Statement{
         virtual void evaluateSemantic() = 0;
 };
 
+class VarDeclarationStatement : public Declaration{
+    public:
+        VarDeclarationStatement(string id, PrimitiveType  type, Expression * size, int line, int column)
+            : Declaration(line, column){
+            this->id = id;
+            this->type = type;
+            this->size = size;
+            this->isArray = size != NULL;
+        }
+        string id;
+        PrimitiveType type;
+        Expression * size;
+        bool isArray;
+        void print();
+        void evaluateSemantic();
+};
+
 class FunctionDeclarationStatement : public Declaration{
     public:
         FunctionDeclarationStatement(string id,list<Statement *> * args, PrimitiveType type, list<Statement * > * statements ,int line, int column)
@@ -298,20 +315,7 @@ class FunctionDeclarationStatement : public Declaration{
         void evaluateSemantic();
 };
 
-class VarDeclarationStatement : public Declaration{
-    public:
-        VarDeclarationStatement(string id, bool isArray, PrimitiveType  type, Expression * size, int line, int column)
-            : Declaration(line, column){
-            this->id = id;
-            this->type = type;
-            this->size = size;
-        }
-        string id;
-        PrimitiveType type;
-        Expression * size;
-        void print();
-        void evaluateSemantic();
-};
+
 
 class AssignationStatement : public Statement
 {
@@ -355,6 +359,15 @@ class MainStmt: public Statement
         void evaluateSemantic();
 };
 
+class MethodInformation{
+    public:
+        PrimitiveType returnType;
+        list<VarDeclarationStatement *> * parameters;
+        MethodInformation(PrimitiveType returnType, list<VarDeclarationStatement *> * parameters){
+            this->returnType = returnType;
+            this->parameters = parameters;
+        }
+};
 
 IMPLEMENT_BINARY_EXPR(And);
 IMPLEMENT_BINARY_EXPR(Mod);

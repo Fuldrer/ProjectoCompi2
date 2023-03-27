@@ -1,12 +1,10 @@
 var a : Int
-a = 5
-
-var b : Array String [5]
+var b : Array Int [5]
 
 b[0] = 10
 b[a] = 2
 b[1] = "Hola"
-
+a = 5
 b[8]
 
 fun c(var f : Int, var y : String) : Int
@@ -36,4 +34,9 @@ else
     a = 7
 }
 
-println(c)
+println(8)
+
+for(8 > 5)
+{
+    b++
+}

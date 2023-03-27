@@ -4,7 +4,7 @@
 
 using namespace std;
 
-//map<string, MethodInformation *> methods = {};
+map<string, MethodInformation *> methods = {};
 
 void IDExpr::print(){
     cout<<"Id expr: "<< this->id <<" line: "<< this->line << " column : "<<this->column<<endl;
@@ -79,31 +79,55 @@ void IfStatement::print(){
 }
 
 void WhileStatement::print(){
-    
+    cout<<"While statement "<<this->line << " column : "<<this->column<<endl;
+    list<Statement *>::iterator it = this->statements->begin();
+    while (it != this->statements->end())
+    {
+        (*it)->print();
+        it++;
+    }
 }
 
 void ForStatement::print(){
-    
+    cout<<"For statement "<<this->line << " column : "<<this->column<<endl;
+    list<Statement *>::iterator it = this->statements->begin();
+    while (it != this->statements->end())
+    {
+        (*it)->print();
+        it++;
+    }
 }
 
 void FunctionDeclarationStatement::print(){
-    
+    cout << "Function declaration line: "<<this->line << " column : "<<this->column<<endl;
+    list<Statement *>::iterator it = this->statements->begin();
+    while (it != this->statements->end())
+    {
+        (*it)->print();
+        it++;
+    }
 }
 
 void VarDeclarationStatement::print(){
-    
+     cout << "Var declaration line: "<<this->line << " column : "<<this->column<<endl;
 }
 
 void AssignationStatement::print(){
-    
+    cout<<"Assignation statement "<<this->line << " column : "<<this->column<<endl; 
 }
 
 void PrintStmt::print(){
-    
+     cout<<"Print statement "<<this->line << " column : "<<this->column<<endl;
 }
 
 void MainStmt::print(){
-    
+    cout<<"Main statement "<<" line: "<<this->line << " column : "<<this->column<<endl;
+    list<Statement *>::iterator it = this->stmts->begin();
+    while (it != this->stmts->end())
+    {
+        (*it)->print();
+        it++;
+    }
 }
 
 
@@ -330,7 +354,7 @@ void ReturnStmt::evaluateSemantic(){
 }
 
 void IfStatement::evaluateSemantic(){
-        if (this->expression->getType() != BOOLEAN)
+    if (this->expression->getType() != BOOLEAN)
     {
         cerr<<"El if requiere una expresion booleana linea: "<< this->line <<" columna "<<this->column<<endl;
         return;
@@ -358,15 +382,31 @@ void WhileStatement::evaluateSemantic(){
 }
 
 void ForStatement::evaluateSemantic(){
+    if(range->getType() != BOOLEAN)
+    {
+        cerr<<"El FOR requiere una expresion booleana linea: "<< this->line <<" columna "<<this->column<<endl;
+        return;
+    }
+    pushContext();
+    list<Statement *>::iterator it = this->statements->begin();
+    while (it != this->statements->end())
+    {
+        (*it)->evaluateSemantic();
+        it++;
+    }
+    popContext();
 }
 
 void FunctionDeclarationStatement::evaluateSemantic(){
-    /*Revisar si el ultimo statement del statement list
-    de la funcion es del mismo tipo que el type de la funcion*/
 }
 
 void VarDeclarationStatement::evaluateSemantic(){
-    
+    if (getVarType(id) != NONE)
+        {
+            cerr<<"Ya existe una variable con el nombre "<<id<<" linea " <<this->line<<" columna: "<<this->column<<endl;
+            return;
+        }
+        currentContext->vars[id] = type;        
 }
 
 void AssignationStatement::evaluateSemantic(){
@@ -381,6 +421,7 @@ void PrintStmt::evaluateSemantic(){
 }
 
 void MainStmt::evaluateSemantic(){
+    pushContext();
     list<Statement *>::iterator it = this->stmts->begin();
     while (it != this->stmts->end())
     {
