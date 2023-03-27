@@ -48,7 +48,7 @@
 
 %%
 
-program: statement_list {$$ = new MainStmt($1, line, column);}
+program: statement_list {$$ = new MainStmt($1, line, column); $$->evaluateSemantic();}
        ;
 
 statement_list: statement_list statement { $$ = $1; $$->push_back($2); }
@@ -65,7 +65,7 @@ statement: KW_PRINTLN '(' expression ')' {$$ = new PrintStmt($3, line, column);}
         | KW_WHILE  expression  TK_LEFTKEY statement_list  TK_RIGHTKEY {$$ = new WhileStatement($2, $4, false , line,column);}
         | KW_DO TK_LEFTKEY statement_list TK_RIGHTKEY KW_WHILE expression {$$ = new WhileStatement($6, $3, true, line,column);}
         | KW_IF expression TK_LEFTKEY statement_list TK_RIGHTKEY  {$$ = new IfStatement($2,$4,NULL,line,column); $$->evaluateSemantic();} 
-        | KW_IF expression TK_LEFTKEY statement_list TK_RIGHTKEY KW_ELSE TK_LEFTKEY statement_list TK_RIGHTKEY {$$ = new IfStatement($2,$4,$8,line,column); $$->evaluateSemantic();}
+        | KW_IF expression TK_LEFTKEY statement_list TK_RIGHTKEY KW_ELSE TK_LEFTKEY statement_list TK_RIGHTKEY {$$ = new IfStatement($2,$4,$8,line,column);}
         | KW_RETURN expression {$$ = new ReturnStmt($2, line, column);}
         | expression {$$ = new ExpressionStatement($1,line, column);}
         ;

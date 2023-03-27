@@ -366,13 +366,25 @@ void FunctionDeclarationStatement::evaluateSemantic(){
 }
 
 void VarDeclarationStatement::evaluateSemantic(){
+    
 }
 
 void AssignationStatement::evaluateSemantic(){
 }
 
 void PrintStmt::evaluateSemantic(){
+    PrimitiveType type = expr->getType();
+    if(type != STRING && type != INTEGER && type != FLOAT){
+        cerr<<"No se permite imprimir tipos distintos de String, Integer, Char y Float linea:"<<this->line <<" columna: "<<this->column<<endl;
+        return;
+    }
 }
 
 void MainStmt::evaluateSemantic(){
+    list<Statement *>::iterator it = this->stmts->begin();
+    while (it != this->stmts->end())
+    {
+        (*it)->evaluateSemantic();
+        it++;
+    }
 }
