@@ -301,6 +301,7 @@ GET_TYPE_BINARY_EXPR_BOOL(Lte);
 /* Begin statement evaluate semantic*/
 
 void ExpressionStatement::evaluateSemantic(){
+    this->expr->getType();
 }
 
 void IfStatement::evaluateSemantic(){
