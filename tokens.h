@@ -44,6 +44,12 @@
 #if YYDEBUG
 extern int yydebug;
 #endif
+/* "%code requires" blocks.  */
+#line 1 "minikotlin.y"
+
+    #include "ast.h"
+
+#line 53 "tokens.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -54,49 +60,68 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    TK_ID = 258,                   /* TK_ID  */
-    TK_NUMBER = 259,               /* TK_NUMBER  */
-    TK_INCREMENT = 260,            /* TK_INCREMENT  */
-    TK_DECREMENT = 261,            /* TK_DECREMENT  */
-    TK_LOGICAL_AND = 262,          /* TK_LOGICAL_AND  */
-    TK_NOT = 263,                  /* TK_NOT  */
-    TK_LOGICAL_OR = 264,           /* TK_LOGICAL_OR  */
-    TK_EQ = 265,                   /* TK_EQ  */
-    TK_DISTINCT = 266,             /* TK_DISTINCT  */
-    TK_GREAT_EQ_THAN = 267,        /* TK_GREAT_EQ_THAN  */
-    TK_LESS_EQ_THAN = 268,         /* TK_LESS_EQ_THAN  */
+    TK_LOGICAL_AND = 258,          /* TK_LOGICAL_AND  */
+    TK_NOT = 259,                  /* TK_NOT  */
+    TK_LOGICAL_OR = 260,           /* TK_LOGICAL_OR  */
+    TK_GREAT_EQ_THAN = 261,        /* TK_GREAT_EQ_THAN  */
+    TK_LESS_EQ_THAN = 262,         /* TK_LESS_EQ_THAN  */
+    KW_DO = 263,                   /* KW_DO  */
+    KW_ELSE = 264,                 /* KW_ELSE  */
+    TK_INCREMENT = 265,            /* TK_INCREMENT  */
+    TK_DECREMENT = 266,            /* TK_DECREMENT  */
+    TK_EQ = 267,                   /* TK_EQ  */
+    TK_DISTINCT = 268,             /* TK_DISTINCT  */
     TK_OP_RANGE = 269,             /* TK_OP_RANGE  */
-    TK_LEFTPARENS = 270,           /* TK_LEFTPARENS  */
-    TK_RIGHTPARENS = 271,          /* TK_RIGHTPARENS  */
+    KW_IN = 270,                   /* KW_IN  */
+    KW_RETURN = 271,               /* KW_RETURN  */
     KW_BREAK = 272,                /* KW_BREAK  */
-    KW_DO = 273,                   /* KW_DO  */
-    KW_ELSE = 274,                 /* KW_ELSE  */
-    KW_FALSE = 275,                /* KW_FALSE  */
-    KW_FOR = 276,                  /* KW_FOR  */
-    KW_IF = 277,                   /* KW_IF  */
-    KW_IN = 278,                   /* KW_IN  */
-    KW_RETURN = 279,               /* KW_RETURN  */
-    KW_TRUE = 280,                 /* KW_TRUE  */
-    KW_VAR = 281,                  /* KW_VAR  */
-    KW_INT = 282,                  /* KW_INT  */
-    KW_FLOAT = 283,                /* KW_FLOAT  */
-    KW_BOOLEAN = 284,              /* KW_BOOLEAN  */
-    KW_STRING = 285,               /* KW_STRING  */
-    KW_ARRAY = 286,                /* KW_ARRAY  */
-    KW_FUN = 287,                  /* KW_FUN  */
-    KW_WHILE = 288,                /* KW_WHILE  */
-    TK_LEFTKEY = 289,              /* TK_LEFTKEY  */
-    TK_RIGHTKEY = 290,             /* TK_RIGHTKEY  */
-    KW_CHAR = 291,                 /* KW_CHAR  */
-    TK_COMMENT_LINE = 292,         /* TK_COMMENT_LINE  */
-    TK_LIT_STRING = 293            /* TK_LIT_STRING  */
+    KW_FOR = 273,                  /* KW_FOR  */
+    KW_IF = 274,                   /* KW_IF  */
+    KW_VAR = 275,                  /* KW_VAR  */
+    KW_INT = 276,                  /* KW_INT  */
+    KW_FLOAT = 277,                /* KW_FLOAT  */
+    KW_BOOLEAN = 278,              /* KW_BOOLEAN  */
+    KW_STRING = 279,               /* KW_STRING  */
+    KW_ARRAY = 280,                /* KW_ARRAY  */
+    KW_FUN = 281,                  /* KW_FUN  */
+    KW_WHILE = 282,                /* KW_WHILE  */
+    TK_LEFTKEY = 283,              /* TK_LEFTKEY  */
+    TK_RIGHTKEY = 284,             /* TK_RIGHTKEY  */
+    KW_CHAR = 285,                 /* KW_CHAR  */
+    KW_PRINTLN = 286,              /* KW_PRINTLN  */
+    TK_FLOAT = 287,                /* TK_FLOAT  */
+    TK_NUMBER = 288,               /* TK_NUMBER  */
+    KW_TRUE = 289,                 /* KW_TRUE  */
+    KW_FALSE = 290,                /* KW_FALSE  */
+    TK_ID = 291,                   /* TK_ID  */
+    TK_LIT_STRING = 292,           /* TK_LIT_STRING  */
+    TK_COMMENT_LINE = 293          /* TK_COMMENT_LINE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+union YYSTYPE
+{
+#line 18 "minikotlin.y"
+
+    Expression * expr_T;
+    char * string_T;
+    ComplexType * type_t;
+    char char_t;
+    int int_t;
+    float float_t;
+    bool bool_t;
+    Statement * statement_t;
+    list<Expression *> * expr_list_t;
+    list<Statement *> * statement_list_t;
+    list<Declaration *> * declaration_list_t;
+
+#line 122 "tokens.h"
+
+};
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
