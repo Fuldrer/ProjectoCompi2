@@ -109,13 +109,15 @@ class IntExpr: public Expression
         PrimitiveType getType();
 };
 
-class ArrayExpr: public Expression
-{
+class ArrayExpr : public Expression{
     public:
-        ArrayExpr(IDExpr * idExpr, Expression * index, int line, int column) : Expression(line, column)
-        {
-            this-> id = idExpr;
-            this-> index = index;
+        ArrayExpr(
+            IDExpr * idExpr,
+            Expression * index,
+            int line,
+            int column) : Expression(line, column){
+            this->id = idExpr;
+            this->index = index;
         }
         IDExpr * id;
         Expression * index;
@@ -282,7 +284,7 @@ class Declaration : public Statement{
 
 class VarDeclarationStatement : public Declaration{
     public:
-        VarDeclarationStatement(string id, PrimitiveType  type, Expression * size, int line, int column)
+        VarDeclarationStatement(string id, PrimitiveType  type, IntExpr * size, int line, int column)
             : Declaration(line, column){
             this->id = id;
             this->type = type;
@@ -291,7 +293,7 @@ class VarDeclarationStatement : public Declaration{
         }
         string id;
         PrimitiveType type;
-        Expression * size;
+        IntExpr * size;
         bool isArray;
         void print();
         void evaluateSemantic();
@@ -362,8 +364,8 @@ class MainStmt: public Statement
 class MethodInformation{
     public:
         PrimitiveType returnType;
-        list<VarDeclarationStatement *> * parameters;
-        MethodInformation(PrimitiveType returnType, list<VarDeclarationStatement *> * parameters){
+        list<Statement *> * parameters;
+        MethodInformation(PrimitiveType returnType, list<Statement *> * parameters){
             this->returnType = returnType;
             this->parameters = parameters;
         }

@@ -1,9 +1,9 @@
 var a : Int
-var b : Array Int [5]
+var b : Int Array [5]
 
-b[0] = 10
+b[0] = a
 b[a] = 2
-b[1] = "Hola"
+b[1] = 8
 a = 5
 b[8]
 
@@ -15,7 +15,9 @@ fun c(var f : Int, var y : String) : Int
 
 c(10, "NO")
 
+var x : Int
 
+x = 5
 fun j(var i: Boolean, var o : Float) : String
 {
     i = true
@@ -39,4 +41,12 @@ println(8)
 for(8 > 5)
 {
     b++
+}
+var c : Int
+
+c = 8
+while(5>7)
+{
+
+    c--
 }

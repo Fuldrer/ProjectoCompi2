@@ -310,7 +310,7 @@ PrimitiveType IDExpr::getType(){
 }
 
 PrimitiveType ArrayExpr::getType(){
-    return this->id->getType();
+    return id->getType();
 }
 
 PRINT_BINARY_EXPR(And);
@@ -380,7 +380,7 @@ void IfStatement::evaluateSemantic(){
 
 void WhileStatement::evaluateSemantic(){
     
-    if (this->expression ->getType()->primitiveType != BOOLEAN)
+    if (this->expression ->getType() != BOOLEAN)
     {
         cerr<<"El while requiere una expresion booleana linea: "<< this->line <<" columna "<<this->column<<endl;
         return;
@@ -393,7 +393,6 @@ void WhileStatement::evaluateSemantic(){
         (*it)->evaluateSemantic();
         it++;
     }
-    //this->statements->evaluateSemantic();
     popContext();
 }
 
@@ -414,10 +413,10 @@ void ForStatement::evaluateSemantic(){
 }
 
 void FunctionDeclarationStatement::evaluateSemantic(){
-    /*if(this->statements->ids->size() > 4){
+    if(args->size() > 4){
         cerr<<"Solo se soportan 4 parametros por método, método "<<this->id<<" linea "<<this->line<<" columna "<<this->column<<endl;
         return;
-    
+    }
     if (methods[this->id] != NULL)
     {
         cerr<<"Ya existe un método con el nombre"<<this->id<<" linea "<<this->line<<" columna "<<this->column<<endl;
@@ -426,11 +425,19 @@ void FunctionDeclarationStatement::evaluateSemantic(){
 
     methods[this->id] = new MethodInformation(this->type, this->args);
     pushContext();
-    this->args->evaluateSemantic();
-    this->statement->evaluateSemantic();
+    list<Statement *>::iterator it = this->args->begin();
+    while (it != this->args->end())
+    {
+        (*it)->evaluateSemantic();
+        it++;
+    }
+    it = this->statements->begin();
+    while (it != this->statements->end())
+    {
+        (*it)->evaluateSemantic();
+        it++;
+    }
     popContext();
-    }*/
-    
 }
 
 void VarDeclarationStatement::evaluateSemantic(){
@@ -439,18 +446,32 @@ void VarDeclarationStatement::evaluateSemantic(){
             cerr<<"Ya existe una variable con el nombre "<<id<<" linea " <<this->line<<" columna: "<<this->column<<endl;
             return;
         }
-        currentContext->vars[id] = type;        
+    if(isArray && size != NULL)
+    {
+        if(size->getType() != INTEGER)
+        {
+
+            cerr<<"Solo se aceptan numeros enteros como tamaños de arreglos "<<" linea " <<this->line<<" columna: "<<this->column<<endl;
+            return;
+        }
+        if (size->value <= 0)
+        {
+            cerr<<"El tamaño del arreglo no puede ser 0 "<<" linea " <<this->line<<" columna: "<<this->column<<endl;
+            return;
+        }
+    }
+    currentContext->vars[id] = type;    
 }
 
 void AssignationStatement::evaluateSemantic(){
-    if (this->isArray && this->index->getType()->primitiveType != INTEGER)
+    if (this->isArray && this->index->getType() != INTEGER)
     {
         cerr<<"El indice en el arreglo debe ser un entero linea: "<<this->line<<" columna: "<<this->column<<endl;
         return;
     }
 
-    PrimitiveType * varType = getVarType(this->id);
-    PrimitiveType * exprType = this->stmt->getType();
+    PrimitiveType  varType = getVarType(id);
+    PrimitiveType  exprType = this->stmt->getType();
 
     if (varType != exprType)
     {
